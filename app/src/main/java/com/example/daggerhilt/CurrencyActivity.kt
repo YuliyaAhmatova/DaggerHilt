@@ -35,17 +35,19 @@ class CurrencyActivity : AppCompatActivity() {
         }
         setSupportActionBar(binding.toolbarMain)
 
-        adapter = CurrencyAdapter(currencies)
-        binding.recyclerViewRV.layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewRV.adapter = adapter
+        initAdapter()
 
-        viewModel.currencies.observe(this) { newCurrencies ->
-            currencies.clear()
-            currencies.addAll(newCurrencies)
-            adapter.notifyDataSetChanged()
+        viewModel.currencies.observe(this) { currencies ->
+            adapter.submitList(currencies)
         }
 
         viewModel.loadCurrencies()
+    }
+
+    private fun initAdapter() {
+        adapter = CurrencyAdapter()
+        binding.recyclerViewRV.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewRV.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
